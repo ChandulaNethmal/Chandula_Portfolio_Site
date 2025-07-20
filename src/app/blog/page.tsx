@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { blogPosts } from '@/lib/data';
+import { getSortedPostsData } from '@/lib/posts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Lightbulb } from 'lucide-react';
 
 export default function BlogPage() {
+  const blogPosts = getSortedPostsData();
+
   return (
     <div className="container py-12">
       <header className="text-center mb-12">

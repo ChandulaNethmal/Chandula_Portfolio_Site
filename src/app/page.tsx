@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { projects, skills } from '@/lib/data';
+import { skills } from '@/lib/data';
+import { getAllProjects } from '@/lib/projects';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,8 @@ const iconMap: { [key: string]: React.ElementType } = {
 };
 
 export default function Home() {
+  const projects = getAllProjects();
+  
   return (
     <div className="flex flex-col gap-16 md:gap-24 py-12">
       {/* Hero Section */}

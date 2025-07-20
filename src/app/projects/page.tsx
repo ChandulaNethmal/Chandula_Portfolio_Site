@@ -1,11 +1,13 @@
 import Image from 'next/image';
-import { projects } from '@/lib/data';
+import { getAllProjects } from '@/lib/projects';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 export default function ProjectsPage() {
+  const projects = getAllProjects();
+
   return (
     <div className="container py-12">
       <header className="text-center mb-12">
