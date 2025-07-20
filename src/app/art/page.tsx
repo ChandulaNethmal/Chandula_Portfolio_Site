@@ -4,39 +4,21 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Camera, Brush } from 'lucide-react';
+import { type ArtPiece, getArtPieces } from '@/lib/art';
+import { useEffect, useState } from 'react';
 
-const photographyData = [
-  { src: 'https://placehold.co/600x400.png', alt: 'A serene lake at dawn', 'data-ai-hint': 'serene lake' },
-  { src: 'https://placehold.co/400x600.png', alt: 'A bustling city street at night', 'data-ai-hint': 'city street' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A majestic mountain range', 'data-ai-hint': 'mountain range' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A close-up of a vibrant flower', 'data-ai-hint': 'vibrant flower' },
-  { src: 'https://placehold.co/400x600.png', alt: 'An abstract architectural detail', 'data-ai-hint': 'abstract architecture' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A wild animal in its natural habitat', 'data-ai-hint': 'wild animal' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A starry night sky', 'data-ai-hint': 'starry sky' },
-  { src: 'https://placehold.co/400x600.png', alt: 'A minimalist black and white portrait', 'data-ai-hint': 'minimalist portrait' },
-];
-
-const drawingsData = [
-  { src: 'https://placehold.co/500x500.png', alt: 'A detailed pencil portrait', 'data-ai-hint': 'pencil portrait' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A colorful digital landscape painting', 'data-ai-hint': 'digital landscape' },
-  { src: 'https://placehold.co/500x500.png', alt: 'An ink drawing of a mythical creature', 'data-ai-hint': 'ink drawing' },
-  { src: 'https://placehold.co/500x500.png', alt: 'A charcoal still life study', 'data-ai-hint': 'charcoal study' },
-  { src: 'https://placehold.co/600x400.png', alt: 'A watercolor abstract piece', 'data-ai-hint': 'watercolor abstract' },
-  { src: 'https://placehold.co/500x500.png', alt: 'A character concept sketch', 'data-ai-hint': 'character sketch' },
-];
-
-const GalleryGrid = ({ items }: { items: typeof photographyData }) => (
+const GalleryGrid = ({ items }: { items: ArtPiece[] }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {items.map((item, index) => (
       <Card key={index} className="overflow-hidden group">
         <CardContent className="p-0">
           <div className="relative aspect-square w-full">
             <Image
-              src={item.src}
+              src={item.image}
               alt={item.alt}
               fill
               className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-              data-ai-hint={item['data-ai-hint']}
+              data-ai-hint={item.aiHint}
             />
           </div>
         </CardContent>
@@ -46,6 +28,17 @@ const GalleryGrid = ({ items }: { items: typeof photographyData }) => (
 );
 
 export default function ArtPage() {
+  const [photos, setPhotos] = useState<ArtPiece[]>([]);
+  const [drawings, setDrawings] = useState<ArtPiece[]>([]);
+
+  useEffect(() => {
+    // Reading from file system can't be done in a client component's initial render.
+    // We can fetch it on the client or pass it from a server component parent.
+    // For simplicity here, we'll fetch on client mount.
+    setPhotos(getArtPieces('photos'));
+    setDrawings(getArtPieces('drawings'));
+  }, []);
+
   return (
     <div className="container py-12">
       <header className="text-center mb-12">
@@ -65,10 +58,10 @@ export default function ArtPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="photography">
-          <GalleryGrid items={photographyData} />
+          <GalleryGrid items={photos} />
         </TabsContent>
         <TabsContent value="drawings">
-          <GalleryGrid items={drawingsData} />
+          <GalleryGrid items={drawings} />
         </TabsContent>
       </Tabs>
     </div>
