@@ -4,7 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 13.3%;
+    --background-lightness: 13.3%;
+    --background: 0 0% var(--background-lightness);
     --foreground: 0 0% 98%;
     --card: 0 0% 16%;
     --card-foreground: 0 0% 98%;
@@ -32,7 +33,8 @@
   }
 
   .dark {
-    --background: 0 0% 13.3%;
+    --background-lightness: 13.3%;
+    --background: 0 0% var(--background-lightness);
     --foreground: 0 0% 98%;
     --card: 0 0% 16%;
     --card-foreground: 0 0% 98%;
@@ -64,6 +66,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }
